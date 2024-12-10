@@ -3,15 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Video Player</title>
+    <title>Fullscreen Video Player</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+        }
+        iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+    </style>
 </head>
 <body>
-    <iframe src="https://archive.org/embed/canva-presentation?autoplay=1&loop=1" 
-            width="800" 
-            height="600" 
-            frameborder="0" 
+    <iframe src="https://herutama7782.github.io/mp4/?autoplay=1&loop=1&muted=1" 
             allow="autoplay; fullscreen" 
-            allowfullscreen>
+            allowfullscreen 
+            id="video-frame">
     </iframe>
+
+    <script>
+        // Memasukkan video ke mode fullscreen saat halaman dimuat
+        window.onload = function() {
+            const iframe = document.getElementById('video-frame');
+            iframe.requestFullscreen = iframe.requestFullscreen || iframe.mozRequestFullScreen || iframe.webkitRequestFullscreen || iframe.msRequestFullscreen;
+            
+            if (iframe.requestFullscreen) {
+                iframe.requestFullscreen();
+            }
+        }
+    </script>
 </body>
 </html>
