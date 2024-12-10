@@ -30,7 +30,7 @@
   
   <h2>Video</h2>
   <video id="videoPlayer" width="100%" height="auto" autoplay loop controls muted allowfullscreen>
-    <source id="videoSource" src="https://archive.org/download/canva-presentation/CanvaPresentation.mp4" type="video/mp4">
+    <source src="https://archive.org/download/canva-presentation/CanvaPresentation.mp4" type="video/mp4">
     Your browser does not support the video tag.
   </video>
 
@@ -64,8 +64,7 @@
       var storedVideo = getCookie('uploadedVideo');
       if (storedVideo) {
         var videoPlayer = document.getElementById('videoPlayer');
-        var videoSource = document.getElementById('videoSource');
-        videoSource.src = storedVideo; // Set video yang disimpan
+        videoPlayer.src = storedVideo; // Set video yang disimpan
         videoPlayer.load(); // Memuat ulang video
       }
     };
@@ -74,23 +73,22 @@
     function uploadVideo() {
       var videoInput = document.getElementById('videoUpload');
       var videoPlayer = document.getElementById('videoPlayer');
-      var videoSource = document.getElementById('videoSource');
       
       // Cek jika ada file yang dipilih
       if (videoInput.files && videoInput.files[0]) {
         var file = videoInput.files[0];
         var fileURL = URL.createObjectURL(file);
         
-        // Update video source dengan file yang diupload
-        videoSource.src = fileURL;
+        // Update src langsung di video player
+        videoPlayer.src = fileURL;
         videoPlayer.load(); // Reload video untuk memperbarui sumber
       }
     }
 
     // Fungsi untuk menyimpan video di cookie
     function saveVideo() {
-      var videoSource = document.getElementById('videoSource');
-      var videoURL = videoSource.src;
+      var videoPlayer = document.getElementById('videoPlayer');
+      var videoURL = videoPlayer.src;
 
       // Cek apakah video sudah ada
       if (videoURL && videoURL !== 'https://archive.org/download/canva-presentation/CanvaPresentation.mp4') {
@@ -112,14 +110,13 @@
     function resetVideo() {
       var videoInput = document.getElementById('videoUpload');
       var videoPlayer = document.getElementById('videoPlayer');
-      var videoSource = document.getElementById('videoSource');
       
       // Menghapus data video yang disimpan di cookie
       document.cookie = 'uploadedVideo=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/';
       
       // Mengatur ulang input file dan video ke sumber asli
       videoInput.value = '';
-      videoSource.src = 'https://archive.org/download/canva-presentation/CanvaPresentation.mp4';
+      videoPlayer.src = 'https://archive.org/download/canva-presentation/CanvaPresentation.mp4';
       videoPlayer.load(); // Reload video untuk memperbarui sumber
     }
   </script>
