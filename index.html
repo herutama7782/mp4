@@ -38,9 +38,30 @@
   <div id="notification">Video berhasil disimpan!</div>
 
   <script>
-    // Mengecek apakah ada video yang disimpan di localStorage saat halaman dimuat
+    // Membaca cookie untuk video
+    function getCookie(name) {
+      let cookieArr = document.cookie.split(";");
+
+      for (let i = 0; i < cookieArr.length; i++) {
+        let cookie = cookieArr[i].trim();
+        if (cookie.indexOf(name + "=") === 0) {
+          return cookie.substring(name.length + 1, cookie.length);
+        }
+      }
+      return "";
+    }
+
+    // Menyimpan cookie
+    function setCookie(name, value, days) {
+      let date = new Date();
+      date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+      let expires = "expires=" + date.toUTCString();
+      document.cookie = name + "=" + value + ";" + expires + ";path=/";
+    }
+
+    // Mengecek apakah ada video yang disimpan di cookie saat halaman dimuat
     window.onload = function() {
-      var storedVideo = localStorage.getItem('uploadedVideo');
+      var storedVideo = getCookie('uploadedVideo');
       if (storedVideo) {
         var videoPlayer = document.getElementById('videoPlayer');
         var videoSource = document.getElementById('videoSource');
@@ -66,15 +87,15 @@
       }
     }
 
-    // Fungsi untuk menyimpan video di localStorage
+    // Fungsi untuk menyimpan video di cookie
     function saveVideo() {
       var videoSource = document.getElementById('videoSource');
       var videoURL = videoSource.src;
 
       // Cek apakah video sudah ada
       if (videoURL && videoURL !== 'https://archive.org/download/canva-presentation/CanvaPresentation.mp4') {
-        // Simpan URL video ke localStorage
-        localStorage.setItem('uploadedVideo', videoURL);
+        // Simpan URL video ke cookie dengan masa kadaluarsa 30 hari
+        setCookie('uploadedVideo', videoURL, 30);
 
         // Tampilkan notifikasi
         var notification = document.getElementById('notification');
@@ -87,14 +108,14 @@
       }
     }
 
-    // Fungsi untuk mereset video dan menghapus data di localStorage
+    // Fungsi untuk mereset video dan menghapus data di cookie
     function resetVideo() {
       var videoInput = document.getElementById('videoUpload');
       var videoPlayer = document.getElementById('videoPlayer');
       var videoSource = document.getElementById('videoSource');
       
-      // Menghapus data video yang disimpan di localStorage
-      localStorage.removeItem('uploadedVideo');
+      // Menghapus data video yang disimpan di cookie
+      document.cookie = 'uploadedVideo=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/';
       
       // Mengatur ulang input file dan video ke sumber asli
       videoInput.value = '';
