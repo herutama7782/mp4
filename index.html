@@ -1,43 +1,107 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fullscreen Video Player</title>
-    <style>
-        body, html {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            width: 100%;
-        }
-        iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Video dengan Autoplay, Loop, Fullscreen, dan Mute</title>
+  <style>
+    /* Style untuk notifikasi */
+    #notification {
+      display: none;
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px;
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      border-radius: 5px;
+      z-index: 1000;
+    }
+  </style>
 </head>
 <body>
-    <iframe src="https://archive.org/download/canva-presentation/CanvaPresentation.mp4?autoplay=1&loop=1&muted=1" 
-            allow="autoplay; fullscreen" 
-            allowfullscreen 
-            id="video-frame">
-    </iframe>
+  <h1>Contoh Video dengan Autoplay, Loop, Fullscreen, dan Mute</h1>
+  
+  <!-- Kolom input untuk upload file -->
+  <input type="file" id="videoUpload" accept="video/mp4">
+  <button onclick="uploadVideo()">Upload</button>
+  <button onclick="saveVideo()">Simpan Video</button>
+  <button onclick="resetVideo()">Reset</button>
+  
+  <h2>Video</h2>
+  <video id="videoPlayer" width="100%" height="auto" autoplay loop controls muted allowfullscreen>
+    <source id="videoSource" src="https://archive.org/download/canva-presentation/CanvaPresentation.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
 
-    <script>
-        // Memasukkan video ke mode fullscreen saat halaman dimuat
-        window.onload = function() {
-            const iframe = document.getElementById('video-frame');
-            iframe.requestFullscreen = iframe.requestFullscreen || iframe.mozRequestFullScreen || iframe.webkitRequestFullscreen || iframe.msRequestFullscreen;
-            
-            if (iframe.requestFullscreen) {
-                iframe.requestFullscreen();
-            }
-        }
-    </script>
+  <!-- Notifikasi berhasil disimpan -->
+  <div id="notification">Video berhasil disimpan!</div>
+
+  <script>
+    // Mengecek apakah ada video yang disimpan di localStorage saat halaman dimuat
+    window.onload = function() {
+      var storedVideo = localStorage.getItem('uploadedVideo');
+      if (storedVideo) {
+        var videoPlayer = document.getElementById('videoPlayer');
+        var videoSource = document.getElementById('videoSource');
+        videoSource.src = storedVideo; // Set video yang disimpan
+        videoPlayer.load(); // Memuat ulang video
+      }
+    };
+
+    // Fungsi untuk mengunggah video
+    function uploadVideo() {
+      var videoInput = document.getElementById('videoUpload');
+      var videoPlayer = document.getElementById('videoPlayer');
+      var videoSource = document.getElementById('videoSource');
+      
+      // Cek jika ada file yang dipilih
+      if (videoInput.files && videoInput.files[0]) {
+        var file = videoInput.files[0];
+        var fileURL = URL.createObjectURL(file);
+        
+        // Update video source dengan file yang diupload
+        videoSource.src = fileURL;
+        videoPlayer.load(); // Reload video untuk memperbarui sumber
+      }
+    }
+
+    // Fungsi untuk menyimpan video di localStorage
+    function saveVideo() {
+      var videoSource = document.getElementById('videoSource');
+      var videoURL = videoSource.src;
+
+      // Cek apakah video sudah ada
+      if (videoURL && videoURL !== 'https://archive.org/download/canva-presentation/CanvaPresentation.mp4') {
+        // Simpan URL video ke localStorage
+        localStorage.setItem('uploadedVideo', videoURL);
+
+        // Tampilkan notifikasi
+        var notification = document.getElementById('notification');
+        notification.style.display = 'block';
+
+        // Sembunyikan notifikasi setelah 3 detik
+        setTimeout(function() {
+          notification.style.display = 'none';
+        }, 3000);
+      }
+    }
+
+    // Fungsi untuk mereset video dan menghapus data di localStorage
+    function resetVideo() {
+      var videoInput = document.getElementById('videoUpload');
+      var videoPlayer = document.getElementById('videoPlayer');
+      var videoSource = document.getElementById('videoSource');
+      
+      // Menghapus data video yang disimpan di localStorage
+      localStorage.removeItem('uploadedVideo');
+      
+      // Mengatur ulang input file dan video ke sumber asli
+      videoInput.value = '';
+      videoSource.src = 'https://archive.org/download/canva-presentation/CanvaPresentation.mp4';
+      videoPlayer.load(); // Reload video untuk memperbarui sumber
+    }
+  </script>
+
 </body>
 </html>
