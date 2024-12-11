@@ -3,123 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Video dengan Autoplay, Loop, Fullscreen, dan Mute</title>
-  <style>
-    /* Style untuk notifikasi */
-    #notification {
-      display: none;
-      background-color: #4CAF50;
-      color: white;
-      padding: 10px;
-      position: fixed;
-      top: 10px;
-      right: 10px;
-      border-radius: 5px;
-      z-index: 1000;
-    }
-  </style>
+  <title>Video dengan Autoplay, Loop, Fullscreen, muted</title>
 </head>
 <body>
-  <h1>Contoh Video dengan Autoplay, Loop, Fullscreen, dan Mute</h1>
-  
-  <!-- Kolom input untuk upload file -->
-  <input type="file" id="videoUpload" accept="video/mp4">
-  <button onclick="uploadVideo()">Upload</button>
-  <button onclick="saveVideo()">Simpan Video</button>
-  <button onclick="resetVideo()">Reset</button>
-  
-  <h2>Video</h2>
-  <video id="videoPlayer" width="100%" height="auto" autoplay loop controls muted allowfullscreen>
+  <video width="100%" height="auto" autoplay loop controls muted allowfullscreen>
     <source src="https://archive.org/download/canva-presentation/CanvaPresentation.mp4" type="video/mp4">
     Your browser does not support the video tag.
   </video>
 
-  <!-- Notifikasi berhasil disimpan -->
-  <div id="notification">Video berhasil disimpan!</div>
-
-  <script>
-    // Membaca cookie untuk video
-    function getCookie(name) {
-      let cookieArr = document.cookie.split(";");
-
-      for (let i = 0; i < cookieArr.length; i++) {
-        let cookie = cookieArr[i].trim();
-        if (cookie.indexOf(name + "=") === 0) {
-          return cookie.substring(name.length + 1, cookie.length);
-        }
-      }
-      return "";
-    }
-
-    // Menyimpan cookie
-    function setCookie(name, value, days) {
-      let date = new Date();
-      date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-      let expires = "expires=" + date.toUTCString();
-      document.cookie = name + "=" + value + ";" + expires + ";path=/";
-    }
-
-    // Mengecek apakah ada video yang disimpan di cookie saat halaman dimuat
-    window.onload = function() {
-      var storedVideo = getCookie('uploadedVideo');
-      if (storedVideo) {
-        var videoPlayer = document.getElementById('videoPlayer');
-        videoPlayer.src = storedVideo; // Set video yang disimpan
-        videoPlayer.load(); // Memuat ulang video
-      }
-    };
-
-    // Fungsi untuk mengunggah video
-    function uploadVideo() {
-      var videoInput = document.getElementById('videoUpload');
-      var videoPlayer = document.getElementById('videoPlayer');
-      
-      // Cek jika ada file yang dipilih
-      if (videoInput.files && videoInput.files[0]) {
-        var file = videoInput.files[0];
-        var fileURL = URL.createObjectURL(file);
-        
-        // Update src langsung di video player
-        videoPlayer.src = fileURL;
-        videoPlayer.load(); // Reload video untuk memperbarui sumber
-      }
-    }
-
-    // Fungsi untuk menyimpan video di cookie
-    function saveVideo() {
-      var videoPlayer = document.getElementById('videoPlayer');
-      var videoURL = videoPlayer.src;
-
-      // Cek apakah video sudah ada
-      if (videoURL && videoURL !== 'https://archive.org/download/canva-presentation/CanvaPresentation.mp4') {
-        // Simpan URL video ke cookie dengan masa kadaluarsa 30 hari
-        setCookie('uploadedVideo', videoURL, 30);
-
-        // Tampilkan notifikasi
-        var notification = document.getElementById('notification');
-        notification.style.display = 'block';
-
-        // Sembunyikan notifikasi setelah 3 detik
-        setTimeout(function() {
-          notification.style.display = 'none';
-        }, 3000);
-      }
-    }
-
-    // Fungsi untuk mereset video dan menghapus data di cookie
-    function resetVideo() {
-      var videoInput = document.getElementById('videoUpload');
-      var videoPlayer = document.getElementById('videoPlayer');
-      
-      // Menghapus data video yang disimpan di cookie
-      document.cookie = 'uploadedVideo=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/';
-      
-      // Mengatur ulang input file dan video ke sumber asli
-      videoInput.value = '';
-      videoPlayer.src = 'https://archive.org/download/canva-presentation/CanvaPresentation.mp4';
-      videoPlayer.load(); // Reload video untuk memperbarui sumber
-    }
-  </script>
-
 </body>
 </html>
+
