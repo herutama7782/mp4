@@ -4,9 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mini Browser</title>
+    
+    <!-- Menghindari cache -->
+    <meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="pragma" content="no-cache">
+    <meta http-equiv="expires" content="0">
+    
     <script>
         window.onload = function() {
-            window.open("https://docs.google.com/presentation/d/e/2PACX-1vSZUK0PszyU1Bu3l5Yt7azVcVoR_liWoOw4b3MyWdhwafhUERCCL1ILh_XaCDkPKttjMIxdpGV7dfG7/pub?start=true&loop=true&delayms=7200000&slide=id.g323e87ed66b_0_9", "_blank");
+            // Hapus cache dengan menambahkan parameter unik di URL
+            const url = "https://docs.google.com/presentation/d/e/2PACX-1vSZUK0PszyU1Bu3l5Yt7azVcVoR_liWoOw4b3MyWdhwafhUERCCL1ILh_XaCDkPKttjMIxdpGV7dfG7/pub?start=true&loop=true&delayms=7200000&slide=id.g323e87ed66b_0_9";
+            const uniqueUrl = url + "&t=" + new Date().getTime(); // Menambahkan timestamp untuk menghindari cache
+
+            window.open(uniqueUrl, "_blank");
         };
     </script>
 </head>
